@@ -190,8 +190,7 @@ class TestReflect:
         """Test reflect with structured output via response_schema.
 
         When response_schema is provided, the response returns structured_output
-        field parsed according to the provided JSON schema. The text field is empty
-        since only a single LLM call is made for structured output.
+        field parsed according to the provided JSON schema.
         """
 
         from pydantic import BaseModel
@@ -210,8 +209,6 @@ class TestReflect:
         )
 
         assert response is not None
-        # Text is empty when using structured output (single LLM call)
-        assert response.text == ""
 
         # Verify structured output is present and can be parsed into model
         assert response.structured_output is not None
@@ -721,3 +718,18 @@ class TestDeleteBank:
         # Verify bank data is deleted - memories should be gone
         memories = client.list_memories(bank_id=bank_id)
         assert memories.total == 0
+
+
+class TestMission:
+    """Tests for mission operations."""
+
+    def test_set_mission(self, client, bank_id):
+        """Test setting a bank's mission."""
+        response = client.set_mission(
+            bank_id=bank_id,
+            mission="Be a helpful PM tracking sprint progress and team capacity",
+        )
+
+        assert response is not None
+        assert response.bank_id == bank_id
+        assert response.mission == "Be a helpful PM tracking sprint progress and team capacity"

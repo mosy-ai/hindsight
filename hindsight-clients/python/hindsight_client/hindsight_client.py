@@ -342,6 +342,26 @@ class Hindsight:
 
         return _run_async(self._banks_api.create_or_update_bank(bank_id, request_obj))
 
+    def set_mission(
+        self,
+        bank_id: str,
+        mission: str,
+    ) -> BankProfileResponse:
+        """
+        Set or update the mission for a memory bank.
+
+        Args:
+            bank_id: The memory bank ID
+            mission: The mission text describing the agent's purpose
+
+        Returns:
+            BankProfileResponse with updated bank profile
+        """
+        from hindsight_client_api.models import create_bank_request
+
+        request_obj = create_bank_request.CreateBankRequest(mission=mission)
+        return _run_async(self._banks_api.create_or_update_bank(bank_id, request_obj))
+
     # Async methods (native async, no _run_async wrapper)
 
     async def aretain_batch(
